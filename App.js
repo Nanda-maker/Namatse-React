@@ -10,7 +10,7 @@
  *      </div>
  *
  * </div>
- * ReactElement(Object) => HTML (Browser understands)
+ * React.createELment => ReactElement(JS Object) => HTMLElement(render)(Browser understands)
  */
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -32,5 +32,33 @@ const parent = React.createElement("div", { id: "parent" }, [
 //   "Hello world from React!"
 // );
 // console.log(heading); // return js object
+
+// JSX - HTML-like or XML-like syntax
+// JSX - transpiled before it reaches the JS Engine - transfiling is done by PARCEL => Babel
+// JSX ==> Babel traspiles it to React.createElement => ReactElement - JS object => HTML Element(render)
+
+// React Element
+const Title = () => (
+  <h1 className="heading" tabIndex="5">
+    Namaste React using JSX 🚀
+  </h1>
+);
+// console.log(jsxheading);
+
+// React Functional Component
+// React Fragment - behaves like an empty tags
+const HeadingComponent = () => (
+  <>
+    <div id="container">
+      {Title()}
+      // <Title />
+      // <Title></Title>
+      <h1 className="heading">Namaste React Functional Component</h1>;
+    </div>
+    <div id="contianer2"></div>
+  </>
+);
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(parent);
+// root.render(jsxheading);
+root.render(<HeadingComponent />);
