@@ -1,44 +1,57 @@
 import RestaurantCard from "./RestaurantCard";
-import { useState } from "react";
-import resList from "../utils/mockData";
+import { useState, useEffect } from "react";
+import Shimmer from "./Shimmer";
 
 const Body = () => {
   // local state variable => super powerful vairalable
-  const [listOfrestaurants, setListOfrestaurant] = useState(resList);
-  //   //normal js variable
-  //   let listOfrestaurant = [
-  //     {
-  //       id: "121603",
-  //       name: "Kannur Food Point",
+  const [listOfrestaurants, setListOfrestaurant] = useState([]);
+  const [filteredRestaurant, setFilteredRestaurant] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  // Whenever state varibales update, react triggers a reconciliation cycle(re-render the component)
+  console.log("Body rendered");
+  useEffect(() => {
+    // console.log("useEffect is called");
+    fetchData();
+  }, []);
+  const fetchData = async () => {
+    const data = await fetch(
+      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9351929&lng=77.62448069999999&page_type=DESKTOP_WEB_LISTING"
+    );
+    const json = await data.json();
+    console.log(json);
+    // optional Chaining
+    setListOfrestaurant(json?.data?.cards[2]?.data?.data?.cards);
+    setFilteredRestaurant(json?.data?.cards[2]?.data?.data?.cards);
+  };
+  // conditional rendering
+  // if (listOfrestaurants.length === 0){
+  //   return <Shimmer/>
+  // }
 
-  //       cuisines: ["Kerala", "Chinese"],
-
-  //       costForTwo: 30000,
-
-  //       deliveryTime: 23,
-
-  //       deliveryTime: 23,
-
-  //       avgRating: "3.8",
-  //     },
-  //     {
-  //       id: "121604",
-  //       name: "KFC",
-
-  //       cuisines: ["Kerala", "Chinese"],
-
-  //       costForTwo: 30000,
-
-  //       deliveryTime: 23,
-
-  //       deliveryTime: 23,
-
-  //       avgRating: "4.5",
-  //     },
-  //   ];
-  return (
+  return listOfrestaurants.length === 0 ? (
+    <Shimmer />
+  ) : (
     <div className="body">
       <div className="filter">
+        <div className="search">
+          <input
+            type="text"
+            className="search-box"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          ></input>
+          <button
+            onClick={() => {
+              console.log(searchText);
+              const filteredRestaurant = listOfrestaurants.filter((res) =>
+                res.data.name.toLowerCase().includes(searchText.toLowerCase())
+              );
+              setFilteredRestaurant(filteredRestaurant);
+            }}
+          >
+            Search
+          </button>
+        </div>
         <button
           className="filter-btn"
           onClick={() => {
@@ -53,7 +66,7 @@ const Body = () => {
         </button>
       </div>
       <div className="res-container">
-        {listOfrestaurants.map((restaurant) => (
+        {filteredRestaurant.map((restaurant) => (
           <RestaurantCard key={restaurant.data.id} resData={restaurant} />
         ))}
       </div>
