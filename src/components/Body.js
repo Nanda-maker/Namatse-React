@@ -1,8 +1,9 @@
 import RestaurantCard, { withPromotedLable } from "./RestaurantCard";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import Shimmer from "./Shimmer";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
 
 const Body = () => {
   // local state variable => super powerful vairalable
@@ -42,7 +43,7 @@ const Body = () => {
         Looks like your are offline. please check your internet connection.
       </h1>
     );
-
+  const { loggedInUser, setUserName } = useContext(UserContext);
   return listOfrestaurants.length === 0 ? (
     <Shimmer />
   ) : (
@@ -81,6 +82,15 @@ const Body = () => {
           >
             Top Rated Restaurants
           </button>
+        </div>
+        <div className="p-4 m-4 flex items-center">
+          <span className="p-2">UserName: </span>
+          <input
+            type="text"
+            className="border border-black p-2 rounded-lg"
+            value={loggedInUser}
+            onChange={(e) => setUserName(e.target.value)}
+          />
         </div>
       </div>
       <div className="flex flex-wrap">
