@@ -28,3 +28,6 @@ const RestaurantCategory = ({ data, showItem, setShowIndex }) => {
 };
 
 export default RestaurantCategory;
+// this component is controlled component since RestaurantMenu component is
+// controlling this component state
+// However, if this component has it's state variable then it is known as uncontrolled component and managing state itself
